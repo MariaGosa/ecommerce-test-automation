@@ -3,10 +3,16 @@ package pl.testautomation.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class LoginPage {
 
     private final WebDriver driver;
+    private final WebDriverWait wait;
 
     private final By usernameInput = By.id("user-name");
     private final By passwordInput = By.id("password");
@@ -15,6 +21,7 @@ public class LoginPage {
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     public void open() {
@@ -22,13 +29,25 @@ public class LoginPage {
     }
 
     public void login(String username, String password) {
-        driver.findElement(usernameInput).sendKeys(username);
-        driver.findElement(passwordInput).sendKeys(password);
-        driver.findElement(loginButton).click();
+        enterText(usernameInput, username);
+        enterText(passwordInput, password);
+
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton))
+                .click();
+    }
+
+    private void enterText(By locator, String value) {
+        WebElement element = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(locator)
+        );
+        element.clear();
+        element.sendKeys(value);
     }
 
     public String getErrorMessage() {
-        return driver.findElement(errorMessage).getText();
+        return wait.until(
+                ExpectedConditions.visibilityOfElementLocated(errorMessage)
+        ).getText();
     }
 
     public String getCurrentUrl() {

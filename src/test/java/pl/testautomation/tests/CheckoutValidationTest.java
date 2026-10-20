@@ -20,11 +20,18 @@ class CheckoutValidationTest extends BaseTest {
         productsPage.openCart();
 
         checkoutPage.startCheckout();
-        checkoutPage.enterCustomerDetails("", "Kowalski", "00-001");
+
+        checkoutPage.enterCustomerDetails(
+                "",
+                "Kowalski",
+                "00-001"
+        );
+
         checkoutPage.continueToOverview();
 
         assertTrue(
-                checkoutPage.getErrorMessage().contains("First Name is required"),
+                checkoutPage.getErrorMessage()
+                        .contains("First Name is required"),
                 "Powinien pojawić się błąd, gdy imię nie zostało podane"
         );
     }

@@ -5,15 +5,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import pl.testautomation.pages.LoginPage;
 import org.openqa.selenium.chrome.ChromeOptions;
+import pl.testautomation.pages.LoginPage;
 
 public abstract class BaseTest {
 
     protected WebDriver driver;
 
     @BeforeEach
-    void setUp() {
+    protected void setUp() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new");
         options.addArguments("--no-sandbox");
@@ -29,9 +29,13 @@ public abstract class BaseTest {
     }
 
     @AfterEach
-    void tearDown() {
+    protected void tearDown() {
         if (driver != null) {
-            driver.quit();
+            try {
+                driver.quit();
+            } finally {
+                driver = null;
+            }
         }
     }
 }

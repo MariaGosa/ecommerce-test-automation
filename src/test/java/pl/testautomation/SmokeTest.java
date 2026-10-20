@@ -1,22 +1,11 @@
 
-package pl.testautomation;
+package pl.testautomation.tests;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class SmokeTest {
-
-    private WebDriver driver;
-
-    @BeforeEach
-    void setUp() {
-        driver = new ChromeDriver();
-    }
+class SmokeTest extends BaseTest {
 
     @Test
     void shouldOpenSauceDemoPage() {
@@ -24,13 +13,10 @@ class SmokeTest {
 
         String actualTitle = driver.getTitle();
 
-        assertEquals("Swag Labs", actualTitle);
-    }
-
-    @AfterEach
-    void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+        assertEquals(
+                "Swag Labs",
+                actualTitle,
+                "Strona SauceDemo powinna mieć tytuł 'Swag Labs'"
+        );
     }
 }

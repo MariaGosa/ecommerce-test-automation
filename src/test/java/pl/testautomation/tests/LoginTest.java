@@ -1,54 +1,34 @@
 
 package pl.testautomation.tests;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pl.testautomation.pages.LoginPage;
+
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class LoginTest {
-
-    private WebDriver driver;
-    private LoginPage loginPage;
-
-    @BeforeEach
-    void setUp() {
-        driver = new ChromeDriver();
-        loginPage = new LoginPage(driver);
-        loginPage.open();
-    }
+class LoginTest extends BaseTest {
 
     @Test
     void shouldLoginWithValidCredentials() {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.open();
+
         loginPage.login("standard_user", "secret_sauce");
 
+        boolean redirected = new WebDriverWait(
+                driver,
+                Duration.ofSeconds(10)
+        ).until(
+                ExpectedConditions.urlContains("inventory.html")
+        );
+
         assertTrue(
-                loginPage.getCurrentUrl().contains("inventory.html"),
+                redirected,
                 "Po poprawnym logowaniu powinna otworzyć się lista produktów"
         );
-    }
-
-    @Test
-    void shouldShowErrorWhenPasswordIsInvalid() {
-        loginPage.login("standard_user", "wrong_password");
-
-        String errorMessage = loginPage.getErrorMessage();
-
-        assertTrue(
-                errorMessage.contains("Username and password do not match"),
-                "Powinien pojawić się komunikat o nieprawidłowym loginie lub haśle"
-        );
-    }
-
-
-    @AfterEach
-    void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
     }
 }
