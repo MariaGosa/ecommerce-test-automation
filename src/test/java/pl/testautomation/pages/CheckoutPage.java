@@ -110,4 +110,19 @@ public class CheckoutPage {
                 ExpectedConditions.visibilityOfElementLocated(errorMessage)
         ).getText();
     }
+
+    public String getFirstNameValue() {
+        return driver.findElement(firstNameInput)
+                .getAttribute("value");
+    }
+
+    public String getCurrentUrl() {
+        return driver.getCurrentUrl();
+    }
+
+    public boolean isErrorMessageDisplayed() {
+        return !driver.findElements(errorMessage).isEmpty()
+                && driver.findElement(errorMessage).isDisplayed();
+    }
+
 }
